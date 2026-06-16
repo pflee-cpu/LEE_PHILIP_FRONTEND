@@ -39,7 +39,7 @@ function handleDelete(id) {
   <div class="task-list-view">
     <h1>My Tasks</h1>
     <p v-if="tasks.length === 0" style="color: #9ca3af; text-align: center;">
-    No Tasks yet
+    No tasks yet
     </p>
 
 
