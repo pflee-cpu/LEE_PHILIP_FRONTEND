@@ -147,14 +147,34 @@ function clearAllDone() {
 
     <!-- TODO 9: Display the stats bar using your computed values -->
     <!-- Format: Total: X | Done: X | Pending: X -->
-    <div class="stats">
-      <!-- your stats here -->
-      Total: {{ totalCount }} |
-      Done: {{ doneCount }} |
-      Pending: {{ pendingCount }}
-
+    
+    <div class="filters">
+      <button
+        :class="{active: currentFilter === 'all'}"
+        @click="currentFilter = 'all'"
+      >
+        All ({{ totalCount}})
+      </button>
+      <button
+        :class="{active: currentFilter === 'done'}"
+        @click="currentFilter = 'done'"
+      >
+        Done ({{ doneCount}})
+      </button>
+      <button
+        :class="{active: currentFilter === 'pending'}"
+        @click="currentFilter = 'pending'"
+      >
+        Pending ({{ pendingCount }})
+      </button>
+      <button
+        class="clear-btn"
+        @click="clearAllDone"
+        v-if="doneCount > 0"
+      >
+        Clear All Done
+      </button>
     </div>
-
     <!-- TODO 10: Show this message only when the task list is empty -->
     <!-- <p class="empty">No tasks yet. Add one above!</p> -->
 
@@ -178,68 +198,59 @@ function clearAllDone() {
           type="checkbox"
           v-model="task.done"
         />
-        <span :class="{ done: task.done }">
-          {{ task.name }}
-        
-        </span>
-          <select 
+        <select 
           v-model="task.priority"
           :class="`priority-${task.priority}`"
           >
             
-          <option value="none">None</option>
+          <option value="none">Priority</option>
           <option value="low">Low</option>
           <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
+        <span :class="{ done: task.done }">
+          {{ task.name }}
+        
+        </span>
+          
         <button @click="removeTask(task.id)">
-          🗑️
+          remove
         </button>
       </li>
     </ul>
     
-    <div class="filters">
-      <button
-        :class="{active: currentFilter === 'all'}"
-        @click="currentFilter = 'all'"
-      >
-        All
-      </button>
-      <button
-        :class="{active: currentFilter === 'done'}"
-        @click="currentFilter = 'done'"
-      >
-        Done
-      </button>
-      <button
-        :class="{active: currentFilter === 'pending'}"
-        @click="currentFilter = 'pending'"
-      >
-        Pending
-      </button>
-      <button
-        class="clear-btn"
-        @click="clearAllDone"
-        v-if="doneCount > 0"
-      >
-        Clear All Done
-      </button>
-    </div>
+    
   </div>
 </template>
 
 <style scoped>
+
 .app {
-  max-width: 480px;
+  max-width: 560px;
   margin: 40px auto;
-  font-family: Arial, sans-serif;
-  padding: 24px;
-  background: #f9fafb;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(139,92,246,0.15),
+              0 2px 8px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.3);
+
 }
 
-h1 { color: #1B2A4A; margin-bottom: 20px; }
+
+h1 { 
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+ }
 
 .input-row {
   display: flex;
@@ -249,20 +260,34 @@ h1 { color: #1B2A4A; margin-bottom: 20px; }
 
 .input-row input {
   flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border: 1.5px solid #e0d7ff;
+  border-radius: 12px;
   font-size: 14px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #4c1d95;
+  outline: none;
+  transition: all 0.2s;
 }
-
+.input-row input:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
 .input-row button {
-  padding: 8px 16px;
-  background: #42B883;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.input-row button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
 }
 
 .stats {
@@ -292,16 +317,28 @@ h1 { color: #1B2A4A; margin-bottom: 20px; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  background: white;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  border: 1px solid #eee;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  border: 1.5px solid rgba(224, 215, 255, 0.6);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+  
+}
+
+.task-list li:hover {
+  border-color: #a78bfa;
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
 }
 
 .task-list li span {
   flex: 1;
   font-size: 14px;
+  color: #4c1d95;
+  font-weight: 500;
 }
 
 /* TODO: Apply this class to task names when task.done is true */
@@ -311,50 +348,86 @@ h1 { color: #1B2A4A; margin-bottom: 20px; }
 }
 
 .task-list li button {
-  padding: 4px 10px;
-  background: #fee2e2;
-  color: #dc2626;
-  border: none;
-  border-radius: 4px;
+  padding: 5px 10px;
+  background: rgba(254, 202, 202, 0.6);
+  color: #991b1b;
+  border: 1.5px solid #fecaca;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  transition: all 0.2s;
 }
-
+.task-list li button:hover {
+  background: #fecaca;
+  transform: scale(1.05);
+}
 .filters {
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .filters button {
-  padding: 6px 14px;
-  border: 1px solid #ccc;
-  background: white;
-  border-radius: 6px;
+  padding: 7px 16px;
+  border: 1.5px solid #e0d7ff;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 500;
+  color: #7c3aed;
+  transition: all 0.2s;
+}
+
+.filters button:hover {
+  border-color: #a78bfa;
+  background: #ede9fe;
 }
 
 .filters button.active {
-  background: #42B883;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
   color: white;
-  border-color: #42B883;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.clear-btn {
+  padding: 7px 16px;
+  border: 1.5px solid #fecaca !important;
+  background: rgba(254, 202, 202, 0.5) !important;
+  border-radius: 20px !important;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #991b1b !important;
+  transition: all 0.2s;
+}
+
+.clear-btn:hover {
+  background: #fecaca !important;
 }
 
 .task-list li select {
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 5px 10px;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
   font-size: 12px;
   cursor: pointer;
   font-weight: bold;
+  appearance: none;
+  text-align: center;
+  min-width: 10px;
+  transition: all 0.2s;
+}
 
+.task-list li select:hover {
+  border-color: #42B883;
 }
 .priority-none   { background-color: white; color: #666; }
-.priority-low    { background-color: #fef08a; color: #854d0e; border-color: #facc15; }
-.priority-medium { background-color: #fed7aa; color: #9a3412; border-color: #f97316; }
-.priority-high   { background-color: #fecaca; color: #991b1b; border-color: #ef4444; }
+.priority-low    { background-color: #f1f1f3; color: #7c3aed; border-color: #c4b5fd; }
+.priority-medium { background-color: #e0d7ff; color: #6d28d9; border-color: #a78bfa; }
+.priority-high   { background-color: #c4b5fd; color: #4c1d95; border-color: #7c3aed; }
 
 </style>
 
