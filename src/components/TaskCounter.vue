@@ -61,6 +61,7 @@ FILE STRUCTURE (this is a single-file component)
 <script setup>
 import { ref, computed } from 'vue'
 
+
 const currentFilter = ref('all') 
 // TODO 1: Create a ref for the text input value (initial value: '')
 const newTaskName = ref('')
@@ -116,8 +117,7 @@ function toggleTask(id) {
 // TODO 6: Write removeTask(id) — filter out the task with this id
 function removeTask(id) {
   // your code here
-  const removedTaskIndex = tasks.value.findIndex(task => task.id === id)
-  tasks.value.splice(removedTaskIndex, 1)
+  tasks.value = tasks.value.filter(task => task.id !== id)
 }
 
 function clearAllDone() {
@@ -127,6 +127,7 @@ function clearAllDone() {
 </script>
 
 <template>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <div class="app">
     <h1 style="text-align: center;">Task Counter</h1>
 
@@ -188,21 +189,21 @@ function clearAllDone() {
     <!-- TODO 11: Render the task list using v-for -->
     <!-- Each item needs: checkbox (v-model), task name (:class done), remove button -->
 
-    <ul class="task-list">
+    <TransitionGroup name="task" tag="ul" class="task-list">
       <!-- your v-for loop here -->
        <li
         v-for="task in filteredTasks"
         :key="task.id"
-      >
+        >
         <input
           type="checkbox"
           v-model="task.done"
-        />
-        <select 
+          />
+          <select 
           v-model="task.priority"
           :class="`priority-${task.priority}`"
           >
-            
+          
           <option value="none">Priority</option>
           <option value="low">Low</option>
           <option value="medium">Medium</option>
@@ -210,20 +211,38 @@ function clearAllDone() {
         </select>
         <span :class="{ done: task.done }">
           {{ task.name }}
-        
+          
         </span>
           
         <button @click="removeTask(task.id)">
-          remove
+          <i class="fa fa-trash"></i>
         </button>
       </li>
-    </ul>
+    </TransitionGroup>
     
     
   </div>
 </template>
 
 <style scoped>
+
+.task-enter-active {
+  transition: all 0.3s ease;
+}
+.task-leave-active {
+  transition: all 0.3s ease;
+}
+
+.task-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.task-leave-to {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
 
 .app {
   max-width: 560px;
@@ -234,7 +253,7 @@ function clearAllDone() {
   backdrop-filter: blur(20px);
   border-radius: 20px;
   box-shadow: 0 8px 40px rgba(139,92,246,0.15),
-              0 2px 8px rgba(0,0,0,0.6);
+              0 2px 8px rgba(0,0,0,0.06);
   border: 1px solid rgba(255,255,255,0.3);
 
 }
@@ -302,7 +321,7 @@ h1 {
 
 .empty {
   text-align: center;
-  color: #aaa;
+  color: #a78bfa;
   font-style: italic;
   margin: 32px 0;
 }
@@ -323,7 +342,7 @@ h1 {
   margin-bottom: 10px;
   border: 1.5px solid rgba(224, 215, 255, 0.6);
   backdrop-filter: blur(10px);
-  transition: all 0.2s;
+
   
 }
 
@@ -344,7 +363,10 @@ h1 {
 /* TODO: Apply this class to task names when task.done is true */
 .done {
   text-decoration: line-through;
-  color: #aaa;
+  text-decoration-color: #a78bfa;
+  color: #c4b5fd;
+  transition: all 0.3s ease;
+  
 }
 
 .task-list li button {
