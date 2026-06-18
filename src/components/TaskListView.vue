@@ -33,6 +33,13 @@ function handleDelete(id) {
   // your code here
   tasks.value = tasks.value.filter(task => task.id !== id)
 }
+
+function handleUpdate(id, newName) {
+  const task = tasks.value.find(task => task.id === id)
+  if (task) {
+    task.name = newName
+  }
+}
 </script>
 
 <template>
@@ -59,6 +66,7 @@ function handleDelete(id) {
       :task="task"
       @complete="handleComplete"
       @delete="handleDelete"
+      @update="handleUpdate"
     >
       <template #meta>
         Due: {{ task.dueDate }}

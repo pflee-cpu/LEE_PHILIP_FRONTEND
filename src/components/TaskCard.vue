@@ -61,13 +61,34 @@ HINTS (read only if stuck)
 
 <!-- ─── TaskCard.vue ─── -->
 <script setup>
+
+import {ref} from 'vue'
+
+const isEditing = ref(false) // track if in editing mode
+const editedName = ref ('') // holds new name while typing
+function startEdit () { //start edit
+  isEditing.value = true
+  editedName.value = props.task.name
+}
+
+function saveEdit () {
+  if (editedName.value.trim()) {
+    emit('update', props.task.id, editedName.value.trim())
+  }
+  isEditing.value = false
+}
+
 const props = defineProps({
   task: {
     type: Object,
     required: true,
+  },
+  priority: {
+    type: String,
+    default: 'low'
   }
 });
-const emit = defineEmits(['complete', 'delete']);
+const emit = defineEmits(['complete', 'delete', 'update']);
 </script>
 
 <template>
@@ -78,7 +99,29 @@ const emit = defineEmits(['complete', 'delete']);
     <div class="task-header">
 
       <!-- TODO 5: Display the task name -->
-       <span class="name">{{ props.task.name }}</span>
+       <span 
+        v-if="!isEditing"
+        class="name"
+        @click="startEdit"
+        style="cursor: pointer;"
+        
+        >
+          {{ props.task.name }}
+        </span>
+        <input
+          v-else
+          class="edit-input"
+          v-model="editedName"
+          @keyup.enter="saveEdit"
+          @blur="saveEdit"
+          autofocus
+        />
+            <span class="badge" :class="`badge-${props.priority}`"> 
+           {{ props.priority }}
+
+       </span>
+
+      
 
       <!-- TODO 6: Add the named slot for metadata -->
       <!-- <slot name="meta" /> -->
@@ -108,6 +151,55 @@ const emit = defineEmits(['complete', 'delete']);
 </template>
 
 <style scoped>
+
+.edit-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1.5px solid #a78bfa;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1B2A4A;
+  outline: none;
+  background: #f5f3ff;
+}
+
+.edit-input:focus {
+  border-color: #7c3aed;
+  box-shadow:  0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+
+
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-low {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.badge-medium {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.badge-high {
+  background-color: #fce7f3;
+  color: #9d174d;
+  border: 1px solid #f9a8d4;
+}
+
+
 .task-card {
   background: white;
   border: 1px solid #e5e7eb;
