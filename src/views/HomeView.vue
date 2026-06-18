@@ -14,7 +14,7 @@ import {tasks} from '../data/tasks'
 const route     = useRoute()
 
 // TODO 1: Read route.query.error — if it equals 'notfound', show a warning banner
-const showErrorBanner = computed(() => route.query.error === 'not found')
+const showErrorBanner = computed(() => route.query.error === 'notfound')
 </script>
 
 <template>
