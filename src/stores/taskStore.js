@@ -56,71 +56,82 @@
 //  Hint 5: storeToRefs is imported from 'pinia', not 'vue'
 //  Hint 6: nextId.value++ increments THEN returns — use it as the id before push
 // =============================================================
-
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-
-
-
-
-
+import { useUserStore } from './userStore'
 // TODO 1: Export a useTaskStore function using defineStore
 // The store ID is 'tasks' — this appears in Vue DevTools
-export const useTaskStore = defineStore('tasks', () => {
-  const tasks = ref([
-  { id: 1, name: 'Test 1', done: false, dueDate: '2026-06-05' },
-  { id: 2, name: 'Test 2', done: true, dueDate: '2026-06-06' },
-  { id: 3, name: 'Test 3', done: false, dueDate: '2026-06-07' }
-])
-const nextId = ref(4)
-  // TODO 2: Define state using ref()
-  // const tasks  = ref([])
-  // const nextId = ref(1)
-
-  // TODO 3: Define getters using computed()
-  const totalCount   = computed(() => tasks.value.length)
-  const doneCount    = computed(() => tasks.value.filter(task => task.done).length)
-  const pendingCount = computed(() => tasks.value.filter(task => !task.done).length)
-
-  // TODO 4: Define addTask(name) action
-  // - Guard against empty names
-  // - Push a new task: { id: nextId.value++, name, done: false }
-  function addTask(name) {
-    // your code here
-    if (!name.trim()) return
-    tasks.value.push ({
-      id: nextId.value++,
-      name: name.trim(),
-      done: false,
-      dueDate: '2026-06-08'
+export const useTaskStore = defineStore(
+  'tasks',
+  () => {
+    const userStore = useUserStore()
+    const tasksByUser = ref({
+      Guest: [
+        { id: 1, name: 'Test 1', done: false, dueDate: '2026-06-05' },
+        { id: 2, name: 'Test 2', done: true, dueDate: '2026-06-06' },
+        { id: 3, name: 'Test 3', done: false, dueDate: '2026-06-07' }
+      ]
     })
-  }
-
-  // TODO 5: Define toggleTask(id) action
-  function toggleTask(id) {
-    // your code here
-    const task = tasks.value.find(task => task.id === id)
-    if (task) {
-      task.done = !task.done
+    const nextId = ref(4)
+    const currentUserName = computed(() => {
+      return userStore.currentUser || 'Guest'
+    })
+    const tasks = computed(() => {
+      const name = currentUserName.value
+      if (!tasksByUser.value[name]) {
+        tasksByUser.value[name] = []
+      }
+      return tasksByUser.value[name]
+    })
+    // TODO 2: Define state using ref()
+    // const tasks  = ref([])
+    // const nextId = ref(1)
+    // TODO 3: Define getters using computed()
+    const totalCount = computed(() => tasks.value.length)
+    const doneCount = computed(() => tasks.value.filter(task => task.done).length)
+    const pendingCount = computed(() => tasks.value.filter(task => !task.done).length)
+    // TODO 4: Define addTask(name) action
+    // - Guard against empty names
+    // - Push a new task: { id: nextId.value++, name, done: false }
+    function addTask(name) {
+      // your code here
+      if (!name.trim()) return
+      tasks.value.push({
+        id: nextId.value++,
+        name: name.trim(),
+        done: false,
+        dueDate: '2026-06-08'
+      })
     }
+    // TODO 5: Define toggleTask(id) action
+    function toggleTask(id) {
+      // your code here
+      const task = tasks.value.find(task => task.id === id)
+      if (task) {
+        task.done = !task.done
+      }
+    }
+    // TODO 6: Define removeTask(id) action
+    function removeTask(id) {
+      // your code here
+      const userName = currentUserName.value
+      tasksByUser.value[userName] = tasksByUser.value[userName].filter(task => task.id !== id)
+    }
+    // TODO 7: Return everything the component needs to access
+    // return { tasks, totalCount, doneCount, pendingCount, addTask, toggleTask, removeTask }
+    return {
+      tasks,
+      tasksByUser,
+      nextId,
+      totalCount,
+      doneCount,
+      pendingCount,
+      addTask,
+      toggleTask,
+      removeTask
+    }
+  },
+  {
+    persist: true
   }
-
-  // TODO 6: Define removeTask(id) action
-  function removeTask(id) {
-    // your code here
-    tasks.value = tasks.value.filter(task => task.id !== id)
-  }
-
-  // TODO 7: Return everything the component needs to access
-  // return { tasks, totalCount, doneCount, pendingCount, addTask, toggleTask, removeTask }
-  return {
-    tasks,
-    nextId,
-    totalCount,
-    doneCount,
-    pendingCount,
-    addTask,
-    toggleTask,
-    removeTask
-  }
-})
+)

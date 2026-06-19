@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 // =====================================================
 // DAY 1 — Reactive Task Counter
 // =====================================================
@@ -15,12 +16,16 @@ import { createPinia } from 'pinia'
 // =====================================================
 // import App from './App.vue'
 // import router from './router'
-// createApp(App).use(createPinia()).use(router).mount('#app')
+// const pinia = createPinia()
+// pinia.use(piniaPluginPersistedstate)
+// createApp(App).use(pinia).use(router).mount('#app')
 // =====================================================
 // DAY 4 — Pinia State Management
 // =====================================================
-// import TaskListView from './components/TaskListView.vue'
-// createApp(TaskListView).use(createPinia()).mount('#app')
+import TaskListView from './components/TaskListView.vue'
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+createApp(TaskListView).use(pinia).mount('#app')
 // =====================================================
 // DAY 5 — API Integration: Todos
 // =====================================================
@@ -31,6 +36,5 @@ import { createPinia } from 'pinia'
 // =====================================================
 // import UsersView from './components/UsersView.vue'
 // createApp(UsersView).mount('#app')
-
-import ApiDashboardView from './components/ApiDashboardView.vue'
-createApp (ApiDashboardView).mount('#app')
+// import ApiDashboardView from './components/ApiDashboardView.vue'
+// createApp(ApiDashboardView).mount('#app')
