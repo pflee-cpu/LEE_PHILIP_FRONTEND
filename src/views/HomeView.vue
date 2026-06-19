@@ -63,4 +63,16 @@ h1 { color: #1B2A4A; margin-bottom: 16px; }
 .task-list li { padding: 12px; background: white; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee; cursor: pointer; }
 .task-list li:hover { border-color: #42B883; }
 .done { text-decoration: line-through; color: #9ca3af; }
+
+
+.page-nav a.router-link-active {
+  color: #1B2A4A;
+  border-bottom: 2px solid #42B883;
+  padding-bottom: 2px;
+}
+
+
+
+
+
 </style>
