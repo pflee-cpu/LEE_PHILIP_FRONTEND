@@ -29,6 +29,14 @@ const filteredTodos = computed(() => {
   return result.slice(0, 20)
 })
 
+function toggleTodo(id) {
+  if (!todos.value) return
+  const todo = todos.value.find(todo => todo.id === id)
+  if (todo) {
+    todo.completed = !todo.completed
+  }
+}
+
 // TODO 2: Create a filteredTodos computed() that:
 //  - Returns [] if todos.value is null (still loading)
 //  - Filters by filter.value ('all' shows first 20, 'done' shows completed, 'pending' shows incomplete)
@@ -88,7 +96,11 @@ const filteredTodos = computed(() => {
           :key="todo.id"
           :class="{'done-item': todo.completed}"
           >
-            <input type="checkbox" :checked="todo.completed" disabled />
+            <input type="checkbox" 
+            :checked="todo.completed" 
+            @change="toggleTodo(todo.id)" 
+            />
+           
             <span :class="{'completed-text': todo.completed}">
               {{ todo.title }}
             </span>

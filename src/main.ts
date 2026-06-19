@@ -24,10 +24,13 @@ import { createPinia } from 'pinia'
 // =====================================================
 // DAY 5 — API Integration: Todos
 // =====================================================
-import TodoListView from './components/TodoListView.vue'
-createApp(TodoListView).mount('#app')
+// import TodoListView from './components/TodoListView.vue'
+// createApp(TodoListView).mount('#app')
 // =====================================================
 // DAY 5 — API Integration: Users
 // =====================================================
 // import UsersView from './components/UsersView.vue'
 // createApp(UsersView).mount('#app')
+
+import ApiDashboardView from './components/ApiDashboardView.vue'
+createApp (ApiDashboardView).mount('#app')
