@@ -29,6 +29,8 @@ const showErrorBanner = computed(() => route.query.error === 'notfound')
     <nav class="page-nav">
       <!-- TODO 3: Add a RouterLink to /about -->
       <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/stats">Stats</RouterLink>
+      
     </nav>
 
     <!-- TODO 4: Render each task as a RouterLink to /task/:id -->
@@ -50,7 +52,12 @@ const showErrorBanner = computed(() => route.query.error === 'notfound')
 .home-view { max-width: 520px; margin: 40px auto; padding: 24px; font-family: Arial, sans-serif; }
 h1 { color: #1B2A4A; margin-bottom: 16px; }
 .error-banner { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px; color: #92400e; font-size: 14px; }
-.page-nav { margin-bottom: 20px; }
+.page-nav {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 16px;
+
+}
 .page-nav a { color: #42B883; text-decoration: none; font-weight: 600; }
 .task-list { list-style: none; padding: 0; margin: 0; }
 .task-list li { padding: 12px; background: white; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee; cursor: pointer; }
