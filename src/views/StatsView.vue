@@ -19,37 +19,55 @@ const pendingCount = computed(() => tasks.filter(task => !task.done).length)
     </div>
 </template>
 
-<style scoped>
-.stats-view {
-    max-width: 520px;
-    margin: 40px auto;
-    padding: 24px;
-    font-family: Arial, sans-serif;
+<style scoped>.stats-view {
+  max-width: 680px;
+  margin: 40px auto;
+  padding: 28px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', Arial, sans-serif;
+  background: rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.12),
+              0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.7);
 }
-
 h1 {
-    color: #1B2A4A;
-    margin-bottom: 16px;
+  margin-bottom: 18px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-
 .stats-card {
-    background: white;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(224, 215, 255, 0.7);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
-
-p {
-    color: #4A5568;
-    font-size: 15px;
-    margin: 8px 0;
+.stats-card p {
+  color: #4A5568;
+  font-size: 15px;
+  margin: 0;
+  padding: 12px 14px;
+  background: rgba(245, 243, 255, 0.9);
+  border-radius: 12px;
+  font-weight: 600;
 }
-
 a {
-    color: #42B883;
-    text-decoration: none;
-    font-weight: 600;
+  color: #7c3aed;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+a:hover {
+  color: #5b21b6;
 }
 
 </style>

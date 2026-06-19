@@ -14,18 +14,18 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 // =====================================================
 // DAY 3 — Vue Router
 // =====================================================
-// import App from './App.vue'
-// import router from './router'
-// const pinia = createPinia()
-// pinia.use(piniaPluginPersistedstate)
-// createApp(App).use(pinia).use(router).mount('#app')
-// =====================================================
-// DAY 4 — Pinia State Management
-// =====================================================
-import TaskListView from './components/TaskListView.vue'
+import App from './App.vue'
+import router from './router'
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-createApp(TaskListView).use(pinia).mount('#app')
+createApp(App).use(pinia).use(router).mount('#app')
+// =====================================================
+// DAY 4 — Pinia State Management
+// // =====================================================
+// import TaskListView from './components/TaskListView.vue'
+// const pinia = createPinia()
+// pinia.use(piniaPluginPersistedstate)
+// createApp(TaskListView).use(pinia).mount('#app')
 // =====================================================
 // DAY 5 — API Integration: Todos
 // =====================================================
