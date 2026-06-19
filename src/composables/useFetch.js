@@ -70,25 +70,25 @@ export function useFetch(url) {
   const data    = ref(null)
   const loading = ref(true)
   const error   = ref(null)
-
-  // TODO 3: Use onMounted with an async callback to fetch the data
-  onMounted(async () => {
+  async function fetchData() {
+    loading.value = true
+    error.value = null
     try {
       const response = await fetch(url)
       if (!response.ok) {
-        throw new Error('HTTP ${response.status');
+        throw new Error(`HTTP ${response.status}`)
+        
       }
       data.value = await response.json()
-  //     TODO 4: fetch the url, check response.ok, parse JSON into data.value
     } catch (e) {
       error.value = e.message
-  //     TODO 5: assign the error message to error.value
     } finally {
       loading.value = false
-  //     TODO 6: set loading.value = false
     }
-  })
+  }
 
+  // TODO 3: Use onMounted with an async callback to fetch the data
+  onMounted(fetchData)
   // TODO 7: Return the three refs
-  return { data, loading, error }
+  return { data, loading, error, refetch: fetchData }
 }

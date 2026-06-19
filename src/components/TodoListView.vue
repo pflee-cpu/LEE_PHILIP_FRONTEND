@@ -9,23 +9,24 @@ import { ref, computed } from 'vue'
 import { useFetch } from '@/composables/useFetch'
 
 const filter = ref('done') // 'all' | 'done' | 'pending'
-
+const search = ref('')
+const { data: todos, loading, error, refetch } = useFetch('https://jsonplaceholder.typicode.com/todos')
 // TODO 1: Call useFetch with the JSONPlaceholder todos endpoint
 // Rename 'data' to 'todos' using destructuring alias syntax
-const { data: todos, loading, error } = useFetch('https://jsonplaceholder.typicode.com/todos')
-
 const filteredTodos = computed(() => {
-  if (!todos.value) return [] // still loading
-  if (filter.value === 'all') {
-    return todos.value.slice(0, 20)
-  } 
+  if (!todos.value) return []
+  let result = todos.value
   if (filter.value === 'done') {
-    return todos.value.filter(todo => todo.completed).slice(0, 20)
+    result = result.filter(todo => todo.completed)
+  } else if (filter.value === 'pending') {
+    result = result.filter(todo => !todo.completed)
   }
-  if (filter.value === 'pending') {
-    return todos.value.filter(todo => !todo.completed).slice(0, 20)
-  } 
-  return []
+  if (search.value.trim()) {
+    result = result.filter(todo =>
+      todo.title.toLowerCase().includes(search.value.toLowerCase())
+    )
+  }
+  return result.slice(0, 20)
 })
 
 // TODO 2: Create a filteredTodos computed() that:
@@ -45,7 +46,8 @@ const filteredTodos = computed(() => {
     </div>
     <!-- TODO 4: Show an error message if error has a value -->
     <div v-else-if="error" class="error-box">
-      Error: {{ error }}
+      <p>Error: {{ error }} </p>
+      <button class="retry-btn" @click="refetch">Retry</button>
     </div>
     
     <!-- TODO 5: Show the content block when NOT loading and NO error -->
@@ -73,7 +75,11 @@ const filteredTodos = computed(() => {
         <!-- TODO 6: Three buttons — All, Done, Pending -->
         <!-- Each sets filter.value and gets :class="{ active: filter === '...' }" -->
       </div>
-
+      <input
+        v-model="search"
+        class="search-input"
+        placeholder="Search todos..."
+      />
       <!-- TODO 7: Render filteredTodos using v-for -->
       <ul class="todo-list">
         <!-- li with checkbox (disabled, reflects todo.completed) and title -->
@@ -114,4 +120,27 @@ h1 { color: #1B2A4A; margin-bottom: 4px; }
 .todo-list li span { flex: 1; }
 .completed-text { text-decoration: line-through; color: #9ca3af; }
 .count { font-size: 13px; color: #9ca3af; margin-top: 12px; text-align: right; }
+
+.retry-btn {
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: #42B883;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+
+
 </style>
